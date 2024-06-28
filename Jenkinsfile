@@ -1,6 +1,10 @@
 pipeline {
     agent any
 
+    tools {
+        cmake 'cmake' // Name of the CMake installation configured in Jenkins
+    }
+
     stages {
         stage('Checkout') {
             steps {
@@ -16,14 +20,16 @@ pipeline {
 
         stage('Build') {
             steps {
-                script {
-                    // Create a build directory
-                    sh 'mkdir -p build'
-                    dir('build') {
-                        // Run CMake to configure the build system
-                        sh 'cmake ..'
-                        // Build the project
-                        sh 'cmake --build .'
+                withCMake(cmake: 'cmake') { // Use the CMake installation configured in Jenkins
+                    script {
+                        // Create a build directory
+                        sh 'mkdir -p build'
+                        dir('build') {
+                            // Run CMake to configure the build system
+                            sh 'cmake ..'
+                            // Build the project
+                            sh 'cmake --build .'
+                        }
                     }
                 }
             }
@@ -34,7 +40,7 @@ pipeline {
                 script {
                     dir('build') {
                         // Run tests
-                        sh 'ctest -c Debug'
+                        sh 'ctest'
                     }
                 }
             }

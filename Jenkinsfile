@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     tools {
-        cmake 'cmake' // Name of the CMake installation configured in Jenkins
+        'hudson.plugins.cmake.CmakeTool' 'cmake' // Name of the CMake installation configured in Jenkins
     }
 
     stages {

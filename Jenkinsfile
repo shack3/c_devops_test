@@ -20,7 +20,7 @@ pipeline {
 
         stage('Build') {
             steps {
-                withCMake(cmake: 'hudson.plugins.cmake.CmakeTool') { // Use the CMake installation configured in Jenkins
+                withCMake(hudson.plugins.cmake.CmakeTool: 'cmake') { // Use the CMake installation configured in Jenkins
                     script {
                         // Create a build directory
                         sh 'mkdir -p build'

@@ -5,6 +5,11 @@ pipeline {
         'hudson.plugins.cmake.CmakeTool' 'cmake' // Name of the CMake installation configured in Jenkins
     }
 
+    environment {
+        // Read the secret from Jenkins credentials store
+        SONAR_TOKEN = credentials('SONAR_TOKEN')
+    }
+
     stages {
         
         stage('Checkout') {

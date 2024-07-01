@@ -42,7 +42,7 @@ pipeline {
                 script {
                     dir('build') {
                         // Run tests
-                        sh 'ctest'
+                        sh 'ctest --verbose'
                     }
                 }
             }

@@ -48,7 +48,8 @@ pipeline {
                         sh '''${SCANNER_HOME}/bin/sonar-scanner \
                             -Dsonar.login=${SONAR_TOKEN} \
                             -Dsonar.projectKey=${SONAR_PROJECT} \
-                            -Dsonar.sources=./src
+                            -Dsonar.sources=./src \
+                            -Dsonar.language=c \
                         '''
                     }
                 }   

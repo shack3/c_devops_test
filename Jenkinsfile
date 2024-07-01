@@ -6,8 +6,7 @@ pipeline {
     }
 
     environment {
-        // Read the secret from Jenkins credentials store
-        SONAR_TOKEN = credentials('SONAR_TOKEN')
+        SCANNER_HOME = tool 'sonar'
     }
 
     stages {
@@ -44,14 +43,14 @@ pipeline {
 
         stage('SonarQube Analysis') {
             steps {
-                script {
-                    scannerHome = tool 'sonar'
-                }
                 withSonarQubeEnv('torresquevedo') {
-                    sh "${scannerHome}/bin/sonar-scanner \
-                        -Dsonar.login=${SONAR_TOKEN} \
-                    "
-                }
+                    withCredentials([string(credentialsId: 'SONAR_TOKEN', variable: 'SONAR_TOKEN'), string(credentialsId: 'SONAR_PROJECT', variable: 'SONAR_PROJECT')]) {
+                        sh "${SCANNER_HOME}/bin/sonar-scanner \
+                            -Dsonar.login=${SONAR_TOKEN} \
+                            -Dsonar.projectKey=${SONAR_PROJECT} \
+                        "
+                    }
+                }   
             }
         }
 

@@ -45,10 +45,11 @@ pipeline {
             steps {
                 withSonarQubeEnv('torresquevedo') {
                     withCredentials([string(credentialsId: 'SONAR_TOKEN', variable: 'SONAR_TOKEN'), string(credentialsId: 'SONAR_PROJECT', variable: 'SONAR_PROJECT')]) {
-                        sh "${SCANNER_HOME}/bin/sonar-scanner \
+                        sh '${SCANNER_HOME}/bin/sonar-scanner \
                             -Dsonar.login=${SONAR_TOKEN} \
                             -Dsonar.projectKey=${SONAR_PROJECT} \
-                        "
+                            -Dsonar.sources=src
+                        '
                     }
                 }   
             }

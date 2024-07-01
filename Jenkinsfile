@@ -43,7 +43,9 @@ pipeline {
                     scannerHome = tool 'sonar'
                 }
                 withSonarQubeEnv('torresquevedo') {
-                    sh "${scannerHome}/bin/sonar-scanner"
+                    sh "${scannerHome}/bin/sonar-scanner \
+                        -Dsonar.login=${SONAR_TOKEN} \
+                    "
                 }
             }
         }

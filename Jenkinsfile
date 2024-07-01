@@ -6,14 +6,21 @@ pipeline {
     }
 
     stages {
+
+        stage('Clean Workspace') {
+            steps {
+                deleteDir() // Clean the workspace before checking out
+            }
+        }
+
         stage('Checkout') {
             steps {
-                // Checkout code from version control including submodules using the scm variable
                 checkout([
                     $class: 'GitSCM', 
-                    branches: [[name: '*/main']],
-                    extensions: [[$class: 'SubmoduleOption', recursiveSubmodules: true]], 
-                    userRemoteConfigs: scm.userRemoteConfigs
+                    branches: [[name: '*/main']], 
+                    doGenerateSubmoduleConfigurations: True, 
+                    extensions: [[$class: 'CleanCheckout'], [$class: 'SubmoduleOption', recursiveSubmodules: true]], // Ensures a clean checkout
+                    userRemoteConfigs:  scm.userRemoteConfigs
                 ])
             }
         }

@@ -50,6 +50,7 @@ pipeline {
                             -Dsonar.projectKey=${SONAR_PROJECT} \
                             -Dsonar.sources=./src \
                             -Dsonar.language=c \
+                            -Dsonar.cfamily.build-wrapper-output=bw-output 
                         '''
                     }
                 }   

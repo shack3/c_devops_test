@@ -46,12 +46,11 @@ pipeline {
                 withSonarQubeEnv('sonarcloud') {
                     withCredentials([string(credentialsId: 'SONAR_TOKEN', variable: 'SONAR_TOKEN')]) {
                         sh '''${SCANNER_HOME}/bin/sonar-scanner \
-                            -Dsonar.login=${SONAR_TOKEN} \
+                            -Dsonar.token=${SONAR_TOKEN} \
                             -Dsonar.organization=panizolledotangel-1 \
                             -Dsonar.projectKey=panizolledotangel_c_devops_test \
                             -Dsonar.sources=./src \
-                            -Dsonar.language=c \
-                            -Dsonar.cfamily.build-wrapper-output=bw-output 
+                            -Dsonar.language=c 
                         '''
                     }
                 }   

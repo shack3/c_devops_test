@@ -43,17 +43,17 @@ pipeline {
 
         stage('SonarQube Analysis') {
             steps {
-                withSonarQubeEnv('torresquevedo') {
-                    withCredentials([string(credentialsId: 'SONAR_TOKEN', variable: 'SONAR_TOKEN'), string(credentialsId: 'SONAR_PROJECT', variable: 'SONAR_PROJECT')]) {
-                        sh '''${SCANNER_HOME}/bin/sonar-scanner \
-                            -Dsonar.login=${SONAR_TOKEN} \
-                            -Dsonar.projectKey=${SONAR_PROJECT} \
-                            -Dsonar.sources=./src \
-                            -Dsonar.language=c \
-                            -Dsonar.cfamily.build-wrapper-output=bw-output 
-                        '''
-                    }
-                }   
+                withCredentials([string(credentialsId: 'SONAR_TOKEN', variable: 'SONAR_TOKEN'), string(credentialsId: 'SONAR_PROJECT', variable: 'SONAR_PROJECT')]) {
+                    sh '''${SCANNER_HOME}/bin/sonar-scanner \
+                        -Dsonar.login=${SONAR_TOKEN} \
+                        -Dsonar.host.url=https://sonarcloud.io
+                        -Dsonar.organization=panizolledotangel-1 \
+                        -Dsonar.projectKey=panizolledotangel_c_devops_test \
+                        -Dsonar.sources=./src \
+                        -Dsonar.language=c \
+                        -Dsonar.cfamily.build-wrapper-output=bw-output 
+                    '''
+                }
             }
         }
 

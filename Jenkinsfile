@@ -50,7 +50,8 @@ pipeline {
                             -Dsonar.organization=panizolledotangel-1 \
                             -Dsonar.projectKey=panizolledotangel_c_devops_test \
                             -Dsonar.sources=./src \
-                            -Dsonar.language=c 
+                            -Dsonar.language=c \
+                            -Dsonar.cfamily.build-wrapper-output=bw-output \
                         '''
                     }
                 }   

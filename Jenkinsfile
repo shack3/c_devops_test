@@ -84,10 +84,10 @@ pipeline {
         }
     }
 
-    post {
-        always {
-            // Clean up build directory after the build
-            //deleteDir()
-        }
-    }
+    // post {
+    //     always {
+    //         // Clean up build directory after the build
+    //         //deleteDir()
+    //     }
+    // }
 }

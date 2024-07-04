@@ -35,7 +35,7 @@ pipeline {
                             // Run CMake to configure the build system
                             sh '${BUILD_WRAPPER_PATH}/build-wrapper-linux-x86-64 --out-dir bw-output cmake ..'
                             // Build the project
-                            sh '${BUILD_WRAPPER_PATH}/build-wrapper-linux-x86-64 --out-dir bw-output cmake --build .'
+                            sh '${BUILD_WRAPPER_PATH}/build-wrapper-linux-x86-64 --out-dir bw-output make'
                         }
                     }
                 }
@@ -52,7 +52,7 @@ pipeline {
                             -Dsonar.projectKey=panizolledotangel_c_devops_test \
                             -Dsonar.sources=./src \
                             -Dsonar.language=c \
-                            -Dsonar.cfamily.build-wrapper-output=./build/bw-output \
+                            -Dsonar.cfamily.compile-commands=./build/bw-output \
                         '''
                     }
                 }   

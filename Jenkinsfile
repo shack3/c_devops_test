@@ -7,6 +7,7 @@ pipeline {
 
     environment {
         SCANNER_HOME = tool 'sonar'
+        BUILD_WRAPPER_PATH = '/opt/build-wrapper-linux-x86'
     }
 
     stages {
@@ -32,9 +33,9 @@ pipeline {
                         sh 'mkdir -p build'
                         dir('build') {
                             // Run CMake to configure the build system
-                            sh 'cmake ..'
+                            sh '${BUILD_WRAPPER_PATH}/build-wrapper-linux-x86-64 --out-dir bw-output cmake ..'
                             // Build the project
-                            sh 'cmake --build .'
+                            sh '${BUILD_WRAPPER_PATH}/build-wrapper-linux-x86-64 --out-dir bw-output cmake --build .'
                         }
                     }
                 }

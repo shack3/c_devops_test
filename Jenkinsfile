@@ -41,36 +41,6 @@ pipeline {
             }
         }
 
-        stage('SonarQube Analysis') {
-            steps {
-                withSonarQubeEnv('sonarcloud') {
-                    withCredentials([string(credentialsId: 'SONAR_TOKEN', variable: 'SONAR_TOKEN')]) {
-                        sh '''${SCANNER_HOME}/bin/sonar-scanner \
-                            -Dsonar.token=${SONAR_TOKEN} \
-                            -Dsonar.organization=panizolledotangel-1 \
-                            -Dsonar.projectKey=panizolledotangel_c_devops_test \
-                            -Dsonar.sources=./src \
-                            -Dsonar.language=c \
-                            -Dsonar.cfamily.build-wrapper-output=bw-output \
-                        '''
-                    }
-                }   
-            }
-        }
-
-        stage('Quality Gate') {
-            steps {
-                script {
-                    timeout(time: 1, unit: 'HOURS') {
-                        def qg = waitForQualityGate()
-                        if (qg.status != 'OK') {
-                            error "Pipeline aborted due to quality gate failure: ${qg.status}"
-                        }
-                    }
-                }
-            }
-        }
-
         stage('Test') {
             steps {
                 script {

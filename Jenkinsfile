@@ -30,6 +30,7 @@ pipeline {
                     // Use the CMake installation configured in Jenkins
                     withEnv(["PATH+CM=${tool name: 'cmake'}/bin"]) {
                         // Create a build directory
+                        sh 'rm -rf build'
                         sh 'mkdir -p build'
                         dir('build') {
                             // Run CMake to configure the build system

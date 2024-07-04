@@ -17,7 +17,7 @@ pipeline {
                 // Checkout code from version control including submodules using the scm variable
                 checkout([
                     $class: 'GitSCM', 
-                    branches: [[name: '*/main']],
+                    branches: [[name: '*/${GIT_BRANCH}']],
                     extensions: [[$class: 'SubmoduleOption', recursiveSubmodules: true]], 
                     userRemoteConfigs: scm.userRemoteConfigs
                 ])
@@ -55,7 +55,8 @@ pipeline {
                             -Dsonar.language=c \
                             -Dsonar.cfamily.compile-commands=./build/bw-output/compile_commands.json \
                             -Dsonar.sourceEncoding=UTF-8 \
-                            -Dsonar.cfamily.cache.enabled=true
+                            -Dsonar.cfamily.cache.enabled=true \
+                            -Dsonar.branch.name=${GIT_BRANCH} 
                         '''
                     }
                 }   

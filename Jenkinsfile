@@ -5,10 +5,6 @@ pipeline {
         'hudson.plugins.cmake.CmakeTool' 'cmake' // Name of the CMake installation configured in Jenkins
     }
 
-    environment {
-        SCANNER_HOME = tool 'sonar'
-    }
-
     stages {
         
         stage('Checkout') {

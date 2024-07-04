@@ -53,7 +53,8 @@ pipeline {
                             -Dsonar.sources=./src \
                             -Dsonar.language=c \
                             -Dsonar.cfamily.compile-commands=./build/bw-output/compile_commands.json \
-                            -Dsonar.sourceEncoding=UTF-8
+                            -Dsonar.sourceEncoding=UTF-8 \
+                            -Dsonar.cfamily.cache.enabled=true
                         '''
                     }
                 }   

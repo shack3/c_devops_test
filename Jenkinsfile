@@ -52,7 +52,7 @@ pipeline {
                             -Dsonar.projectKey=panizolledotangel_c_devops_test \
                             -Dsonar.sources=./src \
                             -Dsonar.language=c \
-                            -Dsonar.cfamily.compile-commands=./build/bw-output \
+                            -Dsonar.cfamily.compile-commands=./build/bw-output/compile_commands.json \
                         '''
                     }
                 }   

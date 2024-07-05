@@ -17,7 +17,6 @@ pipeline {
                 // Checkout code from version control including submodules using the scm variable
                 checkout([
                     $class: 'GitSCM', 
-                    branches: [[name: '*/main']],
                     extensions: [[$class: 'SubmoduleOption', recursiveSubmodules: true]], 
                     userRemoteConfigs: scm.userRemoteConfigs
                 ])

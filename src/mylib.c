@@ -1,7 +1,7 @@
 #include "mylib.h"
 #include <stdio.h>
 
-/* Hello world */
+// Hello world 
 void print_hello() {
     printf("Hello, World!\n");
 }

@@ -5,6 +5,11 @@ pipeline {
         'hudson.plugins.cmake.CmakeTool' 'cmake' // Name of the CMake installation configured in Jenkins
     }
 
+    environment {
+        SCANNER_HOME = tool 'sonar'
+        BUILD_WRAPPER_PATH = '/opt/build-wrapper-linux-x86'
+    }
+
     stages {
         
         stage('Checkout') {
@@ -12,7 +17,7 @@ pipeline {
                 // Checkout code from version control including submodules using the scm variable
                 checkout([
                     $class: 'GitSCM', 
-                    branches: [[name: '*/main']],
+                    branches: [[name: "${GIT_BRANCH}"]],
                     extensions: [[$class: 'SubmoduleOption', recursiveSubmodules: true]], 
                     userRemoteConfigs: scm.userRemoteConfigs
                 ])
@@ -25,12 +30,46 @@ pipeline {
                     // Use the CMake installation configured in Jenkins
                     withEnv(["PATH+CM=${tool name: 'cmake'}/bin"]) {
                         // Create a build directory
+                        sh 'rm -rf build'
                         sh 'mkdir -p build'
                         dir('build') {
                             // Run CMake to configure the build system
-                            sh 'cmake ..'
+                            sh '${BUILD_WRAPPER_PATH}/build-wrapper-linux-x86-64 --out-dir bw-output cmake ..'
                             // Build the project
-                            sh 'cmake --build .'
+                            sh '${BUILD_WRAPPER_PATH}/build-wrapper-linux-x86-64 --out-dir bw-output make'
+                        }
+                    }
+                }
+            }
+        }
+
+        stage('SonarQube Analysis') {
+            steps {
+                withSonarQubeEnv('SonarCloud') {
+                    withCredentials([string(credentialsId: 'SONAR_TOKEN', variable: 'SONAR_TOKEN')]) {
+                        sh '''${SCANNER_HOME}/bin/sonar-scanner \
+                            -Dsonar.token=${SONAR_TOKEN} \
+                            -Dsonar.organization=panizolledotangel-1 \
+                            -Dsonar.projectKey=panizolledotangel_c_devops_test \
+                            -Dsonar.sources=./src \
+                            -Dsonar.language=c \
+                            -Dsonar.cfamily.compile-commands=./build/bw-output/compile_commands.json \
+                            -Dsonar.sourceEncoding=UTF-8 \
+                            -Dsonar.cfamily.cache.enabled=true \
+                            -Dsonar.branch.name=${GIT_BRANCH} 
+                        '''
+                    }
+                }   
+            }
+        }
+
+        stage('Quality Gate') {
+            steps {
+                script {
+                    timeout(time: 1, unit: 'HOURS') {
+                        def qg = waitForQualityGate()
+                        if (qg.status != 'OK') {
+                            error "Pipeline aborted due to quality gate failure: ${qg.status}"
                         }
                     }
                 }

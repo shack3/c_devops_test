@@ -90,6 +90,9 @@ pipeline {
 
     post {
         always {
+            // Archive the build artifacts
+            archiveArtifacts artifacts: 'build/**/*', allowEmptyArchive: true
+            
             // Clean up build directory after the build
             deleteDir()
         }

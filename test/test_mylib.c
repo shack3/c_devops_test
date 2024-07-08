@@ -12,7 +12,7 @@ void tearDown(void) {
 void test_add(void) {
     TEST_ASSERT_EQUAL(5, add(2, 3));
     TEST_ASSERT_EQUAL(0, add(-1, 1));
-    TEST_ASSERT_EQUAL(-1, add(-1, -1));
+    TEST_ASSERT_EQUAL(-2, add(-1, -1));
 }
 
 void test_subtract(void) {

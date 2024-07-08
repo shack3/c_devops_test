@@ -43,6 +43,17 @@ pipeline {
             }
         }
 
+        stage('Test') {
+            steps {
+                script {
+                    dir('build') {
+                        // Run tests
+                        sh 'ctest --verbose'
+                    }
+                }
+            }
+        }
+
         stage('SonarQube Analysis') {
             steps {
                 withSonarQubeEnv('SonarCloud') {
@@ -74,25 +85,14 @@ pipeline {
                     }
                 }
             }
-        }
-
-        stage('Test') {
-            steps {
-                script {
-                    dir('build') {
-                        // Run tests
-                        sh 'ctest --verbose'
-                    }
-                }
-            }
-        }
+        } 
     }
 
     post {
         always {
             // Archive the build artifacts
             archiveArtifacts artifacts: 'build/**/*', allowEmptyArchive: true
-            
+
             // Clean up build directory after the build
             deleteDir()
         }

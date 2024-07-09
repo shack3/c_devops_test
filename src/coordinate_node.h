@@ -13,14 +13,13 @@ typedef struct _tCoordinateNode {
     struct _tCoordinateNode* next;
 } tCoordinateNode;
 
-tCoordinateNode* coordinateNode_init();
+void coordinateNode_init(tCoordinateNode* node);
 void coordinateNode_free(tCoordinateNode* node);
 
 void coordinateNode_addPerson(tCoordinateNode* node, const char* person);
 void coordinateNode_removePerson(tCoordinateNode* node, const char* person);
 int coordinateNode_findPerson(tCoordinateNode* node, const char* person);
 int coordinateNode_countPersons(tCoordinateNode* node);
-int coordinateNode_equal(tCoordinateNode* node1, tCoordinateNode* node2);
 int coordinateNode_hasCoordinate(tCoordinateNode* node, tCoordinate coordinate);
 void coordinateNode_print(const tCoordinateNode* node);
 

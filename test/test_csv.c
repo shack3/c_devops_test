@@ -10,31 +10,39 @@ void tearDown(void) {
 }
 
 void test_read_csv_file(void) {
-    CSVFile *csv = read_csv("example.csv", ',');
+    tCSVFile *csv = (tCSVFile*) malloc(sizeof(tCSVFile));
     TEST_ASSERT_NOT_NULL(csv);
 
-    TEST_ASSERT_EQUAL(2, csv->row_count);
+    tApiError error = csv_read(csv, "example_1.csv", ',');
+    TEST_ASSERT_EQUAL(E_SUCCESS, error);
+
+    TEST_ASSERT_EQUAL(4, csv->row_count);
     TEST_ASSERT_EQUAL(7, csv->header_count);
-    TEST_ASSERT_EQUAL(0, get_column_index(csv, "name"));
-    TEST_ASSERT_EQUAL(1, get_column_index(csv, "surname"));
-    TEST_ASSERT_EQUAL(4, get_column_index(csv, "document"));
+    TEST_ASSERT_EQUAL(0, csv_get_column_index(csv, "name"));
+    TEST_ASSERT_EQUAL(1, csv_get_column_index(csv, "surname"));
+    TEST_ASSERT_EQUAL(4, csv_get_column_index(csv, "document"));
     
-    free_csv(csv);
+    csv_free(csv);
+    free(csv);
 }
 
 void test_get_item_by_row_and_column_name(void) {
-    CSVFile *csv = read_csv("example.csv", ',');
+    tCSVFile *csv = (tCSVFile*) malloc(sizeof(tCSVFile));
     TEST_ASSERT_NOT_NULL(csv);
-    
-    TEST_ASSERT_EQUAL_STRING("angel", get_item_by_row_and_column_name(csv, 0, "name"));
-    TEST_ASSERT_EQUAL_STRING("panizo", get_item_by_row_and_column_name(csv, 0, "surname"));
-    TEST_ASSERT_EQUAL_STRING("98001567", get_item_by_row_and_column_name(csv, 0, "document"));
 
-    TEST_ASSERT_EQUAL_STRING("harry", get_item_by_row_and_column_name(csv, 1, "name"));
-    TEST_ASSERT_EQUAL_STRING("potter", get_item_by_row_and_column_name(csv, 1, "surname"));
-    TEST_ASSERT_EQUAL_STRING("49001567", get_item_by_row_and_column_name(csv, 1, "document"));
+    tApiError error = csv_read(csv, "example_1.csv", ',');
+    TEST_ASSERT_EQUAL(E_SUCCESS, error);
     
-    free_csv(csv);
+    TEST_ASSERT_EQUAL_STRING("angel", csv_get_item_by_row_and_column_name(csv, 0, "name"));
+    TEST_ASSERT_EQUAL_STRING("panizo", csv_get_item_by_row_and_column_name(csv, 0, "surname"));
+    TEST_ASSERT_EQUAL_STRING("98001567", csv_get_item_by_row_and_column_name(csv, 0, "document"));
+
+    TEST_ASSERT_EQUAL_STRING("harry", csv_get_item_by_row_and_column_name(csv, 1, "name"));
+    TEST_ASSERT_EQUAL_STRING("potter", csv_get_item_by_row_and_column_name(csv, 1, "surname"));
+    TEST_ASSERT_EQUAL_STRING("49001567", csv_get_item_by_row_and_column_name(csv, 1, "document"));
+    
+    csv_free(csv);
+    free(csv);
 }
 
 int main(void) {

@@ -8,6 +8,7 @@ enum _tApiError
     E_NOT_IMPLEMENTED = -1, // Called method is not implemented
     E_FILE_NOT_FOUND = -2, // File not found
     E_PERSON_NOT_FOUND = -3, // Person not found
+    E_DATE_NOT_FOUND = -8, // Person not found
     E_INVALID_ENTRY_TYPE = -4, // Invalid entry type
     E_INVALID_ENTRY_FORMAT = -5, // Invalid entry format
     E_DUPLICATED_ENTRY = -6, // Duplicated entry

@@ -65,13 +65,23 @@ const char* parse_error(tApiError error) {
     }
 }
 
-int main() {
+int main(int argc, char **argv) {
+
+    // check that the number of arguments is 1
+    if (argc != 2) {
+        printf("Usage: %s <csv_file>\n", argv[0]);
+        return -1;
+    }
+
+    // read the csv file name from the arguments
+    const char* filename = argv[1];
+
     printf("Initializing API\n");
 
     tApiData data;
     api_init(&data);
 
-    tApiError result = api_loadData(&data, "example_1.csv", false);
+    tApiError result = api_loadData(&data, filename, false);
     if (result != E_SUCCESS) {
         perror(parse_error(result));
         return -1;

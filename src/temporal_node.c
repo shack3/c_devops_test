@@ -43,14 +43,14 @@ void temporalNode_addPersonCoordinate(tTemporalNode* node, tCoordinate coordinat
         }
         else {
             tCoordinateNode* aux = node->coordinateNode;
-            if (coordinateNode_hasCoordinate(aux, coordinate)) {
+            if (aux->coordinate.latitude == coordinate.latitude && aux->coordinate.longitude == coordinate.longitude) {
                 coordinateNode_addPerson(aux, person);
                 return;
             }
 
             while (aux->next) {
                 aux = aux->next;
-                if (coordinateNode_hasCoordinate(aux, coordinate)) {
+                if (aux->coordinate.latitude == coordinate.latitude && aux->coordinate.longitude == coordinate.longitude) {
                     coordinateNode_addPerson(aux, person);
                     return;
                 }

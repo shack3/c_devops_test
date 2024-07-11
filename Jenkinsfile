@@ -60,8 +60,8 @@ pipeline {
                     withCredentials([string(credentialsId: 'SONAR_TOKEN', variable: 'SONAR_TOKEN')]) {
                         sh '''${SCANNER_HOME}/bin/sonar-scanner \
                             -Dsonar.token=${SONAR_TOKEN} \
-                            -Dsonar.organization=panizolledotangel-1 \
-                            -Dsonar.projectKey=panizolledotangel_c_devops_test \
+                            -Dsonar.organization=shack3 \
+                            -Dsonar.projectKey=shack3_c_devops_test \
                             -Dsonar.sources=./src \
                             -Dsonar.language=c \
                             -Dsonar.cfamily.compile-commands=./build/bw-output/compile_commands.json \

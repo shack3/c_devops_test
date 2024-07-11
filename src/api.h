@@ -38,7 +38,7 @@ tApiError api_persons_in_contact(const tApiData* data, tDateTime ini, tDateTime 
 tApiError api_get_dates(const tApiData* data, tDateTime* min, tDateTime* max);
 tApiError api_get_coordinates_in_date(const tApiData* data, tDateTime date, tCoordinateArray* coordinates);
 tApiError api_get_located_persons(const tApiData* data, tDateTime ini, tDateTime end, tPopulation* population);
-tApiError deleteNode(tApiData* data);
+void deleteNode(tApiData* data, tTemporalNode** aux, tTemporalNode* prev);
 
 void api_free(tApiData* data);
 

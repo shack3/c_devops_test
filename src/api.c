@@ -192,29 +192,29 @@ tApiError api_add_person_geolocation(tApiData* data, tDateTime date, const char*
     }
 }
 
-tApiError deleteNode(tApiData* data) {
-    tTemporalNode* aux = data->temporal_node;
-    tTemporalNode* prev = NULL;
+
+void deleteNode(tApiData* data, tTemporalNode** aux, tTemporalNode* prev) {
     data->numNodes--;
     if (data->numNodes == 0) {
-        temporalNode_free(aux);
-        free(aux);
+        temporalNode_free((*aux));
+        free((*aux));
         data->temporal_node = NULL;
-        aux = NULL;
+        (*aux) = NULL;
     } else {
         if (prev) {
-            prev->next = aux->next;
-            temporalNode_free(aux);
-            free(aux);
-            aux = prev->next;
+            prev->next = (*aux)->next;
+            temporalNode_free((*aux));
+            free((*aux));
+            (*aux) = prev->next;
         } else {
-            data->temporal_node = aux->next;
-            temporalNode_free(aux);
-            free(aux);
-            aux = data->temporal_node;
+            data->temporal_node = (*aux)->next;
+            temporalNode_free((*aux));
+            free((*aux));
+            (*aux) = data->temporal_node;
         }
     }
 }
+
 
 tApiError api_remove_person(tApiData* data, const char* document) {
     if (data) {
@@ -224,8 +224,7 @@ tApiError api_remove_person(tApiData* data, const char* document) {
         while(aux) {
             temporalNode_removePerson(aux, document);
             if (aux->numCoordinates == 0) {
-                /******************/
-                deleteNode(&data);
+                deleteNode(data, &aux, prev);
             } else {
                 prev = aux;
                 aux = aux->next;
@@ -240,6 +239,7 @@ tApiError api_remove_person(tApiData* data, const char* document) {
 }
 
 
+
 tApiError api_remove_geodata(tApiData* data, tDateTime ini, tDateTime end) {
     if (data) {
         tTemporalNode* aux = data->temporal_node;
@@ -248,7 +248,7 @@ tApiError api_remove_geodata(tApiData* data, tDateTime ini, tDateTime end) {
         {
             if (dateTime_cmp(aux->date, ini) >= 0 && dateTime_cmp(aux->date, end) <= 0) {
                 /****************/
-                deleteNode(&data);
+                deleteNode(data, &aux, prev);
             } else {
                 prev = aux;
                 aux = aux->next;

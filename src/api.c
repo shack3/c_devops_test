@@ -192,6 +192,30 @@ tApiError api_add_person_geolocation(tApiData* data, tDateTime date, const char*
     }
 }
 
+tApiError deleteNode(tApiData* data) {
+    tTemporalNode* aux = data->temporal_node;
+    tTemporalNode* prev = NULL;
+    data->numNodes--;
+    if (data->numNodes == 0) {
+        temporalNode_free(aux);
+        free(aux);
+        data->temporal_node = NULL;
+        aux = NULL;
+    } else {
+        if (prev) {
+            prev->next = aux->next;
+            temporalNode_free(aux);
+            free(aux);
+            aux = prev->next;
+        } else {
+            data->temporal_node = aux->next;
+            temporalNode_free(aux);
+            free(aux);
+            aux = data->temporal_node;
+        }
+    }
+}
+
 tApiError api_remove_person(tApiData* data, const char* document) {
     if (data) {
         tTemporalNode* aux = data->temporal_node;
@@ -200,26 +224,8 @@ tApiError api_remove_person(tApiData* data, const char* document) {
         while(aux) {
             temporalNode_removePerson(aux, document);
             if (aux->numCoordinates == 0) {
-                data->numNodes--;
-
-                if (data->numNodes == 0) {
-                    temporalNode_free(aux);
-                    free(aux);
-                    data->temporal_node = NULL;
-                    aux = NULL;
-                } else {
-                    if (prev) {
-                        prev->next = aux->next;
-                        temporalNode_free(aux);
-                        free(aux);
-                        aux = prev->next;
-                    } else {
-                        data->temporal_node = aux->next;
-                        temporalNode_free(aux);
-                        free(aux);
-                        aux = data->temporal_node;
-                    }
-                }
+                /******************/
+                deleteNode(&data);
             } else {
                 prev = aux;
                 aux = aux->next;
@@ -230,7 +236,9 @@ tApiError api_remove_person(tApiData* data, const char* document) {
     } else {
         return E_MEMORY_ERROR;
     }
+    /*********/
 }
+
 
 tApiError api_remove_geodata(tApiData* data, tDateTime ini, tDateTime end) {
     if (data) {
@@ -239,25 +247,8 @@ tApiError api_remove_geodata(tApiData* data, tDateTime ini, tDateTime end) {
         while (aux)
         {
             if (dateTime_cmp(aux->date, ini) >= 0 && dateTime_cmp(aux->date, end) <= 0) {
-                data->numNodes--;
-                if (data->numNodes == 0) {
-                    temporalNode_free(aux);
-                    free(aux);
-                    data->temporal_node = NULL;
-                    aux = NULL;
-                } else {
-                    if (prev) {
-                        prev->next = aux->next;
-                        temporalNode_free(aux);
-                        free(aux);
-                        aux = prev->next;
-                    } else {
-                        data->temporal_node = aux->next;
-                        temporalNode_free(aux);
-                        free(aux);
-                        aux = data->temporal_node;
-                    }
-                }
+                /****************/
+                deleteNode(&data);
             } else {
                 prev = aux;
                 aux = aux->next;
@@ -267,6 +258,7 @@ tApiError api_remove_geodata(tApiData* data, tDateTime ini, tDateTime end) {
     } else {
         return E_MEMORY_ERROR;
     }
+    /*************************/
 }
 
 /*tApiError api_count_persons(const tApiData* data, tDateTime init, tDateTime end, int* count) {
